@@ -2,11 +2,14 @@
 #include <vector>
 using namespace std;
 
-struct DATable {
+class DATable {
     private:
         vector<int> data = {};
 
     public:
+        DATable() {
+            this->data = {};
+        }
 
         /**
          * Add key value
@@ -36,11 +39,13 @@ struct DATable {
 
 class HashTable {
     private:
+        int mod;
         vector<int> data;
 
     public:
-        HashTable() {
+        HashTable(int mod) {
             this->data = {};
+            this->mod = mod;
         }
 
         /**
@@ -49,7 +54,7 @@ class HashTable {
          * @return the index of the key value
          */
         int hash(int x) {
-            return x % 10;
+            return x % mod;
         }
 
         /**
@@ -79,5 +84,17 @@ class HashTable {
 };
 
 int main() {
+    int val, modulus;
+    string satVal;
 
+    while(!cin.fail()) {                // Take in data
+        cin >> val;
+        if(val == -1) break;
+    }
+
+    cin.ignore(1, '\n');
+    while(!cin.fail()) {                // Take in satellite data
+        cin >> satVal;
+        if(satVal == "*") break;
+    }
 }
