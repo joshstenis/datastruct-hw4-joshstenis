@@ -172,7 +172,7 @@ int main() {
         case 0:
         {
             DirectAddress *table = new DirectAddress();
-            table->toString(searchKeys);
+            cout << table->toString(searchKeys);
         } break;
 
         case 1 || 2:
