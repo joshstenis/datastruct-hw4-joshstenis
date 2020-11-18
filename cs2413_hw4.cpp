@@ -2,12 +2,12 @@
 #include <vector>
 using namespace std;
 
-class DATable {
+class DirectAddress {
     private:
         vector<int> data = {};
 
     public:
-        DATable() {
+        DirectAddress() {
             this->data = {};
         }
 
@@ -35,17 +35,31 @@ class DATable {
         string toString(int x) {
             return "" + data[x];
         }
+
+        /**
+         * Overload: Returns several probed values from the DA table
+         * @param searchKeys the keys to the desired values
+         * @return the string of satellite values
+         */
+        string toString(vector<int> searchKeys) {
+            string ret = toString(searchKeys[0]);
+
+            for(int i=1; i < searchKeys.size(); i++) {
+                ret += " " + toString(searchKeys[i]);
+            } return ret;
+        }
 };
 
 class HashTable {
     private:
-        int mod;
+        int mod, collision;
         vector<int> data;
 
     public:
-        HashTable(int mod) {
+        HashTable(int mod, int collision) {
             this->data = {};
             this->mod = mod;
+            this->collision = collision;
         }
 
         /**
@@ -55,6 +69,36 @@ class HashTable {
          */
         int hash(int x) {
             return x % mod;
+        }
+
+        /**
+         * Handles collisions in table
+         * @param AR Add/Remove indicator: indicates whether the collision is being added (1) or removed/accessed (-1)
+         */
+        void collide(int AR) {
+            switch(AR) {
+                case 1:
+                {
+                    // Adding collision
+                    if(collision == 1) {
+                        // separate chaining
+                    } else if(collision == 2) {
+                        // quadratic probing
+                    }
+                } break;
+
+                case -1:
+                {
+                    // Removing collision
+                    if(collision == 1) {
+                        // separate chaining
+                    } else if(collision == 2) {
+                        // quadratic probing
+                    }
+                } break;
+
+                default: break;
+            }
         }
 
         /**
@@ -81,20 +125,62 @@ class HashTable {
         string toString(int x) {
             return "" + data[hash(x)];
         }
+
+        /**
+         * Overload: Returns several probed values from the hash table
+         * @param searchKeys the keys to the desired values
+         * @return the string of satellite values
+         */
+        string toString(vector<int> searchKeys) {
+            string ret = toString(searchKeys[0]);
+
+            for(int i=1; i < searchKeys.size(); i++) {
+                ret += " " + toString(searchKeys[i]);
+            } return ret;
+        }
 };
 
 int main() {
-    int val, modulus;
-    string satVal;
+    int val, modulus, impTable, mod;
+    char satVal;
+    vector<char> satData;
+    vector<int> tableKeys, searchKeys;
 
     while(!cin.fail()) {                // Take in data
         cin >> val;
         if(val == -1) break;
+        tableKeys.push_back(val);
     }
 
     cin.ignore(1, '\n');
     while(!cin.fail()) {                // Take in satellite data
         cin >> satVal;
-        if(satVal == "*") break;
+        if(satVal == '*') break;
+        satData.push_back(satVal);
+    }
+
+    cin >> impTable;
+    cin >> mod;
+
+    while(!cin.fail()) {                // Take in search keys
+        cin >> val;
+        if(val == -1) break;
+        searchKeys.push_back(val);
+    }
+
+    switch(impTable) {
+        case 0:
+        {
+            DirectAddress *table = new DirectAddress();
+            table->toString(searchKeys);
+        } break;
+
+        case 1 || 2:
+        {
+            HashTable *table = new HashTable(mod, impTable);
+            cout << table->toString(searchKeys);
+        } break;
+
+        default: break;
     }
 }
