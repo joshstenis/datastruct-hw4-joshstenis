@@ -186,6 +186,7 @@ int main() {
     cin >> impTable;
     cin >> mod;
 
+    cin.ignore(1, '\n');
     while(!cin.fail()) {                // Take in search keys
         cin >> val;
         if(val == -1) break;
