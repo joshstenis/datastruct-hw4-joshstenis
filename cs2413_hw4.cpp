@@ -4,23 +4,24 @@ using namespace std;
 
 class DirectAddress {
     private:
-        vector<int> data = {};
+        vector<char> data = {};
 
     public:
         DirectAddress() {
-            this->data = {};
+            this->data = {'*'};
         }
 
         /**
-         * Add key value
-         * @param x key value
+         * Add value to table
+         * @param key the key
+         * @param value the value
          */
-        void add(int x) {
-            data.insert(data.begin()+x, x);
+        void add(int key, char value) {
+            data.insert(data.begin()+key, value);
         }
         
         /**
-         * Remove key value
+         * Remove value from table
          * @param x key value
          */
         void remove(int x) {
@@ -28,16 +29,16 @@ class DirectAddress {
         }
 
         /**
-         * Output key value
-         * @param x key value
-         * @return the key value
+         * Returns the value at given key
+         * @param x the key
+         * @return the value
          */
         string toString(int x) {
             return "" + data[x];
         }
 
         /**
-         * Overload: Returns several probed values from the DA table
+         * Returns several values from the table
          * @param searchKeys the keys to the desired values
          * @return the string of satellite values
          */
@@ -110,8 +111,9 @@ class HashTable {
         }
 
         /**
-         * Add key value after running hash function
-         * @param x key value
+         * Add value after running hash function
+         * @param key the key
+         * @param value the value associated with key
          */
         void add(int key, char value) {
             data.insert(data.begin()+hash(key), value);
@@ -126,15 +128,15 @@ class HashTable {
         }
 
         /**
-         * Remove key value
-         * @param key value
+         * Remove value at given key
+         * @param key key value
          */
         void remove(int x) {
             data.erase(data.begin()+hash(x));
         }
 
         /**
-         * Output data at given key
+         * Returns data at given key
          * @param x key value
          * @return the satellite value
          */
@@ -143,16 +145,16 @@ class HashTable {
         }
 
         /**
-         * Outputs several values
+         * Returns several values
          * @param searchKeys the keys to the desired values
          * @return the string of satellite values
          */
         string toString(vector<int> searchKeys) {
             string ret = toString(searchKeys[0]);
 
-            for(int i=1; i < searchKeys.size(); i++) {
+            for(int i=1; i < searchKeys.size(); i++)
                 ret += " " + toString(searchKeys[i]);
-            } return ret;
+            return ret;
         }
 };
 
