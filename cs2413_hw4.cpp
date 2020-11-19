@@ -53,11 +53,19 @@ class DirectAddress {
 class HashTable {
     private:
         int mod, collision;
-        vector<int> data;
+        vector<char> data;
 
     public:
         HashTable(int mod, int collision) {
-            this->data = {};
+            this->data = {'*'};
+            this->mod = mod;
+            this->collision = collision;
+        }
+
+        HashTable(vector<int> keys, vector<char> values, int mod, int collision) {
+            this->data = {'*'};
+            for(int i=0; i < values.size(); i++)
+                this->add(keys[i], values[i]);
             this->mod = mod;
             this->collision = collision;
         }
@@ -105,7 +113,7 @@ class HashTable {
          * Add key value after running hash function
          * @param x key value
          */
-        void add(int key, int value) {
+        void add(int key, char value) {
             data.insert(data.begin()+hash(key), value);
             
             // try {
@@ -126,16 +134,16 @@ class HashTable {
         }
 
         /**
-         * Output key value
+         * Output data at given key
          * @param x key value
-         * @return the key value
+         * @return the satellite value
          */
         string toString(int x) {
             return "" + data[hash(x)];
         }
 
         /**
-         * Overload: Returns several probed values from the hash table
+         * Outputs several values
          * @param searchKeys the keys to the desired values
          * @return the string of satellite values
          */
