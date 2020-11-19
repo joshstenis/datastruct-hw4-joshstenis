@@ -105,8 +105,16 @@ class HashTable {
          * Add key value after running hash function
          * @param x key value
          */
-        void add(int x) {
-            data.insert(data.begin()+hash(x), x);
+        void add(int key, int value) {
+            data.insert(data.begin()+hash(key), value);
+            
+            // try {
+            //     data.insert(data.begin()+hash(key), value);
+            // } catch(const out_of_range& e) {
+            //     while(data.size() <= hash(key)) {
+            //         data.push_back(NULL);
+            //     } data.insert(data.begin()+hash(key), value);
+            // }
         }
 
         /**
