@@ -11,6 +11,12 @@ class DirectAddress {
             this->data = {'*'};
         }
 
+        DirectAddress(vector<int> keys, vector<char> values) {
+            this->data = {'*'};
+            for(int i=0; i < values.size(); i++)
+                this->add(keys[i], values[i]);
+        }
+
         /**
          * Add value to table
          * @param key the key
@@ -189,13 +195,13 @@ int main() {
     switch(impTable) {
         case 0:
         {
-            DirectAddress *table = new DirectAddress();
+            DirectAddress *table = new DirectAddress(tableKeys, satData);
             cout << table->toString(searchKeys);
         } break;
 
         case 1 || 2:
         {
-            HashTable *table = new HashTable(mod, impTable);
+            HashTable *table = new HashTable(tableKeys, satData, mod, impTable);
             cout << table->toString(searchKeys);
         } break;
 
