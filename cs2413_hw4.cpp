@@ -8,13 +8,16 @@ class DirectAddress {
 
     public:
         DirectAddress() {
-            this->data = {'*'};
+            this->data = {};
         }
 
         DirectAddress(vector<int> keys, vector<char> values) {
-            this->data = {'*'};
+            for(int i=0; i< values.size(); i++)         // Populate data field with '*'
+                data.push_back('*');
+
             for(int i=0; i < values.size(); i++)
                 this->add(keys[i], values[i]);
+            cout << "POPULATED" << endl;
         }
 
         /**
@@ -23,7 +26,13 @@ class DirectAddress {
          * @param value the value
          */
         void add(int key, char value) {
-            data.insert(data.begin()+key, value);
+            try {
+                data.insert(data.begin()+key, value);
+            } catch(const out_of_range& e) {
+                while(data.size() <= key) {
+                    data.push_back('*');
+                } data.insert(data.begin()+key, value);
+            }
         }
         
         /**
