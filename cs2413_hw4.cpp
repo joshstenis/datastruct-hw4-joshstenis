@@ -38,7 +38,7 @@ class DirectAddress {
          */
         void add(int key, char value) {
             if(key >= data.size())
-                data.resize(key+1);
+                data.resize(key+1, '*');
             data.insert(data.begin()+key, value);
         }
         
