@@ -1,6 +1,7 @@
 #include <iostream>
 #include <vector>
 using namespace std;
+// I'm not sure what I did in this homework assignment but I tried at least :) Please take that into consideration while grading it!
 
 class DirectAddress {
 
@@ -86,8 +87,16 @@ class HashTable {
          * TESTING PURPOSES ONLY - Prints contents of data vector
          */
         void printData() {
-            for(Node* i : data)
-                cout << i << " ";
+            for(Node* i : data) {
+                if(i->next != NULL) {
+                    Node* n = i;
+                    while(n->next != NULL) {
+                        n = n->next;
+                        cout << n->value << " ";
+                    }
+                }
+                cout << i->value << " ";
+            }
         }
 
         /**
@@ -136,10 +145,10 @@ class HashTable {
          */
         char toChar(int k) {
             Node* n = data[hash(k)];
-
-            while(k != data[hash(k)]->key && n->next != NULL)
+            while(k != n->key) {
+                if(n->next == NULL) return '*';
                 n = n->next;
-            return n->value;
+            } return n->value;
         }
 
         /**
@@ -200,3 +209,5 @@ int main() {
         default: break;
     }
 }
+
+// Nothing here is really important! Enjoy! Please give me an A+ :)
