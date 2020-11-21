@@ -70,6 +70,8 @@ class HashTable {
 
     public:
         HashTable(vector<char> values, vector<int> keys, int mod, int collision) {
+            for(int i=0; i < mod; i++) data.push_back(new Node('*', -1, NULL));
+
             for(int i=0; i < values.size(); i++)
                 this->add(values[i], keys[i]);
             this->mod = mod;
@@ -77,7 +79,7 @@ class HashTable {
         }
 
         /**
-         * TESTING PURPOSES ONLY: Prints contents of data vector
+         * TESTING PURPOSES ONLY - Prints contents of data vector
          */
         void printData() {
             for(Node* i : data)
@@ -101,14 +103,14 @@ class HashTable {
         void add(char value, int key) {
             if(data[hash(key)]->value != '*' && this->collision == 1) {                 // Separate chaining
                 Node* n = data[hash(key)];
-                while(data[hash(key)]->value != '*')
+                while(data[hash(key)]->next != NULL)
                     n = n->next;
                 Node* node = new Node(value, key, NULL);
                 n->next = node;
             } else if (data[hash(key)]->value != '*' && this->collision == 2) {         // Quadratic probing
                 // bruh
             } else {
-                if(hash(key) >= data.size()) data.resize(hash(key)+1, new Node('*', 0, NULL));
+                if(hash(key) >= data.size()) data.resize(hash(key)+1, new Node('*', -1, NULL));
                 data.insert(data.begin()+hash(key), new Node(value, key, NULL));
             }
         }
