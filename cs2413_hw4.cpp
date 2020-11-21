@@ -14,7 +14,6 @@ struct Node {
 };
 
 class DirectAddress {
-    private:
         vector<char> data = {};
 
     public:
@@ -125,21 +124,12 @@ class HashTable {
         }
 
         /**
-         * Returns Node* object associated with given key value
-         * @param k key value
-         * @return the satellite data
-         */
-        Node* getData(int k) {
-            return data[hash(k)];
-        }
-
-        /**
          * Returns data at given key
          * @param k key value
          * @return the satellite value
          */
         string toString(int k) {
-            return "" + getData(k)->value;
+            return "" + data[hash(k)]->value;
         }
 
         /**
