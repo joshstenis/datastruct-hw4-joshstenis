@@ -2,6 +2,17 @@
 #include <vector>
 using namespace std;
 
+/**
+ * Nodes that will store key/value pairs while separate chaining
+ */
+struct Node {
+    char value;
+    int key;
+    Node* next;
+
+    Node(char v, int k, Node* n) : value(v), key(k), next(n) {}
+};
+
 class DirectAddress {
     private:
         vector<char> data = {};
@@ -26,13 +37,9 @@ class DirectAddress {
          * @param value the value
          */
         void add(int key, char value) {
-            try {
-                data.insert(data.begin()+key, value);
-            } catch(const out_of_range& e) {
-                while(data.size() <= key) {
-                    data.push_back('*');
-                } data.insert(data.begin()+key, value);
-            }
+            if(key >= data.size())
+                data.resize(key+1);
+            data.insert(data.begin()+key, value);
         }
         
         /**
@@ -68,21 +75,6 @@ class DirectAddress {
 
 class HashTable {
     private:
-        /**
-         * Nodes that will store key/value pairs while separate chaining
-         */
-        struct Node {
-            char value;
-            int key;
-            Node *next;
-
-            Node(char v, int k, Node *n) {
-                value = v;
-                key = k;
-                next = n;
-            }
-        };
-
         int mod, collision;
         vector<Node> data;
 
@@ -90,9 +82,6 @@ class HashTable {
         HashTable(int mod, int collision) {
             this->mod = mod;
             this->collision = collision;
-            if(collision == 1) {
-                this->data = {};
-            }
         }
 
         HashTable(vector<int> keys, vector<char> values, int mod, int collision) {
@@ -148,7 +137,9 @@ class HashTable {
          * @param value the value associated with key
          */
         void add(int key, char value) {
-            data.insert(data.begin()+hash(key), value);
+            Node* n = new Node(value, key, NULL);
+            if(data[hash(key)])
+            data.insert(data.begin()+hash(key), n);
             
             // try {
             //     data.insert(data.begin()+hash(key), value);
@@ -222,13 +213,13 @@ int main() {
     switch(impTable) {
         case 0:
         {
-            DirectAddress *table = new DirectAddress(tableKeys, satData);
+            DirectAddress* table = new DirectAddress(tableKeys, satData);
             cout << table->toString(searchKeys);
         } break;
 
         case 1 || 2:
         {
-            HashTable *table = new HashTable(tableKeys, satData, mod, impTable);
+            HashTable* table = new HashTable(tableKeys, satData, mod, impTable);
             cout << table->toString(searchKeys);
         } break;
 
