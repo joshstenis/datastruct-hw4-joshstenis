@@ -70,9 +70,12 @@ class HashTable {
 
     public:
         HashTable(vector<char> values, vector<int> keys, int mod, int collision) {
-            for(int i=0; i < mod; i++) data.push_back(new Node('*', -1, NULL));
+            for(int i=0; i < mod; i++) {                    // Fill data with empty nodes
+                Node* n = new Node('*', -1, NULL);
+                data.push_back(n);
+            }
 
-            for(int i=0; i < values.size(); i++)
+            for(int i=0; i < values.size(); i++)            // Populate input key-value pairs
                 this->add(values[i], keys[i]);
             this->mod = mod;
             this->collision = collision;
@@ -103,15 +106,17 @@ class HashTable {
         void add(char value, int key) {
             if(data[hash(key)]->value != '*' && this->collision == 1) {                 // Separate chaining
                 Node* n = data[hash(key)];
-                while(data[hash(key)]->next != NULL)
+                while(n->next != NULL)
                     n = n->next;
                 Node* node = new Node(value, key, NULL);
                 n->next = node;
             } else if (data[hash(key)]->value != '*' && this->collision == 2) {         // Quadratic probing
                 // bruh
             } else {
-                if(hash(key) >= data.size()) data.resize(hash(key)+1, new Node('*', -1, NULL));
-                data.insert(data.begin()+hash(key), new Node(value, key, NULL));
+                Node* n = new Node('*', -1, NULL);
+                Node* node = new Node(value, key, NULL);
+                if(hash(key) >= data.size()) data.resize(hash(key)+1, n);
+                data.insert(data.begin()+hash(key), node);
             }
         }
 
@@ -137,7 +142,7 @@ class HashTable {
          * @param searchKeys the keys to the desired values
          * @return the string of satellite values
          */
-        string search(vector<int> searchKeys) {
+        void search(vector<int> searchKeys) {
             cout << toChar(searchKeys[0]);
             for(int i=1; i < searchKeys.size(); i++)
                 cout << " " << toChar(searchKeys[i]);
@@ -183,7 +188,8 @@ int main() {
         case 1 || 2:
         {
             HashTable* table = new HashTable(satData, tableKeys, mod, impTable);
-            table->search(searchKeys);
+            table->printData();
+            // table->search(searchKeys);
         } break;
 
         default: break;
