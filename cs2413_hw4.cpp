@@ -71,7 +71,7 @@ class HashTable {
 
     public:
         HashTable(vector<char> values, vector<int> keys, int mod, int collision) {
-            for(int i=0; i < mod; i++) {                    // Fill data with empty nodes
+            for(int i=0; i < mod; i++) {                      // Fill data with empty nodes
                 Node* n = new Node('*', -1, NULL);
                 data.push_back(n);
             }
@@ -79,8 +79,9 @@ class HashTable {
             this->mod = mod;
             this->collision = collision;
 
-            for(int i=0; i < values.size(); i++)            // Populate input key-value pairs
+            for(int i=0; i < values.size(); i++)              // Populate input key-value pairs
                 this->add(values[i], keys[i]);
+            this->printData();
         }
 
         /**
@@ -88,13 +89,13 @@ class HashTable {
          */
         void printData() {
             for(Node* i : data) {
-                if(i->next != NULL) {
-                    Node* n = i;
-                    while(n->next != NULL) {
-                        n = n->next;
-                        cout << n->value << " ";
-                    }
-                }
+                // if(i->next != NULL) {
+                //     Node* n = i;
+                //     while(n->next != NULL) {
+                //         n = n->next;
+                //         cout << n->value << " ";
+                //     }
+                // }
                 cout << i->value << " ";
             }
         }
@@ -121,11 +122,16 @@ class HashTable {
                 Node* node = new Node(value, key, NULL);
                 n->next = node;
             } else if (data[hash(key)]->value != '*' && this->collision == 2) {         // Quadratic probing
+                bool done = false;
                 int i = 1;
-                while(data[hash(key) + i*i]->value != '*') { i++;
-                    if(hash(key) + i*i >= data.size()) data.resize(hash(key) + (i*i) + 1, new Node('*', -1, NULL));
-                } data[hash(key) + i*i]->value = value;
-            } else {
+                while(!done) {
+                    if((key + i*i) % mod >= data.size()) data.resize(2 * ((key + i*i) % mod), new Node('*', -1, NULL));
+                    if(data[(key + i*i) % mod]->value == '*') {
+                        data[(key + i*i) % mod] = new Node(value, key, NULL);
+                        done = true;
+                    }
+                }
+            } else {                                                                    // No collision
                 Node* n = new Node('*', -1, NULL);
                 Node* node = new Node(value, key, NULL);
                 if(hash(key) >= data.size()) data.resize(hash(key)+1, n);
@@ -139,18 +145,20 @@ class HashTable {
          * @return the satellite value
          */
         char toChar(int k) {
+            Node* n = data[hash(k)];
             if(collision == 1) {
-                Node* n = data[hash(k)];
-                while(k != n->key) {
+                while(n->key != k) {
                     if(n->next == NULL) return '*';
                     n = n->next;
                 } return n->value;
             } else if(collision == 2) {
-                int i = 0;
-                Node* n = data[hash(k) + i*i];
-                while(n->key != k) i++;
-                return n->value;
-            }
+                int i = 1;
+                while(n->key != k) {
+                    i++;
+                    if(hash(k) + i*i >= data.size()) return '*';
+                    n = data[hash(k)];
+                } return n->value;
+            } return '*';
         }
 
         /**
@@ -204,8 +212,8 @@ int main() {
         case 1 || 2:
         {
             HashTable* table = new HashTable(satData, tableKeys, mod, impTable);
-            // table->printData();
-            table->search(searchKeys);
+            table->printData();
+            // table->search(searchKeys);
         } break;
 
         default: break;
