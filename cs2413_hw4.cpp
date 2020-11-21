@@ -18,10 +18,6 @@ class DirectAddress {
         vector<char> data;
         
     public:
-        DirectAddress() {
-            this->data = {'*'};
-        }
-
         DirectAddress(vector<int> keys, vector<char> values) {
             for(int i=0; i < values.size(); i++)
                 this->add(values[i], keys[i]);
@@ -73,13 +69,8 @@ class HashTable {
         vector<Node*> data;
 
     public:
-        HashTable(int mod, int collision) {
-            this->mod = mod;
-            this->collision = collision;
-        }
-
         HashTable(vector<char> values, vector<int> keys, int mod, int collision) {
-            for(int i : values)
+            for(int i=0; i < values.size(); i++)
                 this->add(values[i], keys[i]);
             this->mod = mod;
             this->collision = collision;
