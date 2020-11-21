@@ -121,21 +121,16 @@ class HashTable {
                 Node* node = new Node(value, key, NULL);
                 n->next = node;
             } else if (data[hash(key)]->value != '*' && this->collision == 2) {         // Quadratic probing
-                // bruh
+                int i = 1;
+                while(data[hash(key) + i*i]->value != '*') { i++;
+                    if(hash(key) + i*i >= data.size()) data.resize(hash(key) + (i*i) + 1, new Node('*', -1, NULL));
+                } data[hash(key) + i*i]->value = value;
             } else {
                 Node* n = new Node('*', -1, NULL);
                 Node* node = new Node(value, key, NULL);
                 if(hash(key) >= data.size()) data.resize(hash(key)+1, n);
                 data[hash(key)] = node;
             }
-        }
-
-        /**
-         * Remove value at given key
-         * @param key key value
-         */
-        void remove(int x) {
-            data.erase(data.begin()+hash(x));
         }
 
         /**
@@ -151,7 +146,10 @@ class HashTable {
                     n = n->next;
                 } return n->value;
             } else if(collision == 2) {
-                
+                int i = 0;
+                Node* n = data[hash(k) + i*i];
+                while(n->key != k) i++;
+                return n->value;
             }
         }
 
