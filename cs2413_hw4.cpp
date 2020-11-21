@@ -61,11 +61,13 @@ class DirectAddress {
          * @return the string of satellite values
          */
         string toString(vector<int> searchKeys) {
-            string ret = toString(searchKeys[0]);
+            string ret;
 
-            for(int i=1; i < searchKeys.size(); i++) {
-                ret += " " + toString(searchKeys[i]);
-            } return ret;
+            for(int i : searchKeys)
+                ret += toString(searchKeys[i]) + " ";
+            ret.pop_back();
+
+            return ret;
         }
 };
 
