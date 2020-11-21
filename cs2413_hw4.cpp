@@ -14,16 +14,25 @@ struct Node {
 };
 
 class DirectAddress {
-        vector<char> data = {};
 
+        vector<char> data;
+        
     public:
         DirectAddress() {
-            this->data = {};
+            this->data = {'*'};
         }
 
         DirectAddress(vector<int> keys, vector<char> values) {
             for(int i=0; i < values.size(); i++)
-                this->add(keys[i], values[i]);
+                this->add(values[i], keys[i]);
+        }
+
+        /**
+         * TESTING PURPOSES ONLY: Prints contents of data vector
+         */
+        void printData() {
+            for(char i : data)
+                cout << i << " ";
         }
 
         /**
@@ -34,7 +43,7 @@ class DirectAddress {
         void add(char value, int key) {
             if(key >= data.size())
                 data.resize(key+1, '*');
-            data.insert(data.begin()+key, value);
+            data[key] = value;
         }
         
         /**
@@ -42,7 +51,7 @@ class DirectAddress {
          * @param k key value
          */
         void remove(int k) {
-            data.erase(data.begin()+k);
+            data[k] = '*';
         }
 
         /**
@@ -50,23 +59,20 @@ class DirectAddress {
          * @param k the key
          * @return the value
          */
-        string toString(int k) {
-            return "" + data[k];
+        char toChar(int k) {
+            return data[k];
         }
 
         /**
-         * Returns several values from the table
+         * Outputs several values from the table
          * @param searchKeys the keys to the desired values
          * @return the string of satellite values
          */
-        string toString(vector<int> searchKeys) {
-            string ret;
-
-            for(int i : searchKeys)
-                ret += toString(searchKeys[i]) + " ";
-            ret.pop_back();
-
-            return ret;
+        void search(vector<int> searchKeys) {
+            cout << toChar(searchKeys[0]);
+            
+            for(int i=1; i < searchKeys.size(); i++)
+                cout << " " << toChar(searchKeys[i]);
         }
 };
 
@@ -150,15 +156,15 @@ class HashTable {
 };
 
 int main() {
-    int val, modulus, impTable, mod;
+    int key, impTable, mod;
     char satVal;
     vector<char> satData;
     vector<int> tableKeys, searchKeys;
 
     while(!cin.fail()) {                // Take in data
-        cin >> val;
-        if(val == -1) break;
-        tableKeys.push_back(val);
+        cin >> key;
+        if(key == -1) break;
+        tableKeys.push_back(key);
     }
 
     cin.ignore(1, '\n');
@@ -173,16 +179,16 @@ int main() {
 
     cin.ignore(1, '\n');
     while(!cin.fail()) {                // Take in search keys
-        cin >> val;
-        if(val == -1) break;
-        searchKeys.push_back(val);
+        cin >> key;
+        if(key == -1) break;
+        searchKeys.push_back(key);
     }
 
     switch(impTable) {
         case 0:
         {
             DirectAddress* table = new DirectAddress(tableKeys, satData);
-            cout << table->toString(searchKeys);
+            table->search(searchKeys);
         } break;
 
         case 1 || 2:
