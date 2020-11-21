@@ -24,7 +24,6 @@ class DirectAddress {
         DirectAddress(vector<int> keys, vector<char> values) {
             for(int i=0; i < values.size(); i++)
                 this->add(keys[i], values[i]);
-            cout << "POPULATED" << endl;
         }
 
         /**
