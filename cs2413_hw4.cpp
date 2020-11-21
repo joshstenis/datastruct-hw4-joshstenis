@@ -45,14 +45,6 @@ class DirectAddress {
                 data.resize(key+1, '*');
             data[key] = value;
         }
-        
-        /**
-         * Remove value from table
-         * @param k key value
-         */
-        void remove(int k) {
-            data[k] = '*';
-        }
 
         /**
          * Returns the value at given key
@@ -70,7 +62,7 @@ class DirectAddress {
          */
         void search(vector<int> searchKeys) {
             cout << toChar(searchKeys[0]);
-            
+
             for(int i=1; i < searchKeys.size(); i++)
                 cout << " " << toChar(searchKeys[i]);
         }
@@ -91,6 +83,14 @@ class HashTable {
                 this->add(values[i], keys[i]);
             this->mod = mod;
             this->collision = collision;
+        }
+
+        /**
+         * TESTING PURPOSES ONLY: Prints contents of data vector
+         */
+        void printData() {
+            for(Node* i : data)
+                cout << i << " ";
         }
 
         /**
