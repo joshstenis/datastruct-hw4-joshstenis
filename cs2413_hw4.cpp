@@ -1,6 +1,8 @@
 #include <iostream>
 #include <vector>
+
 using namespace std;
+template <typename T>
 
 class DirectAddress {
     private:
@@ -68,14 +70,31 @@ class DirectAddress {
 
 class HashTable {
     private:
+        /**
+         * Nodes that will store key/value pairs while separate chaining
+         */
+        struct Node {
+            char value;
+            int key;
+            Node *next;
+
+            Node(char v, int k, Node *n) {
+                value = v;
+                key = k;
+                next = n;
+            }
+        };
+
         int mod, collision;
-        vector<char> data;
+        vector<T> data;
 
     public:
         HashTable(int mod, int collision) {
-            this->data = {'*'};
             this->mod = mod;
             this->collision = collision;
+            if(collision == 1) {
+                this->data = {};
+            }
         }
 
         HashTable(vector<int> keys, vector<char> values, int mod, int collision) {
