@@ -44,19 +44,19 @@ class DirectAddress {
         
         /**
          * Remove value from table
-         * @param x key value
+         * @param k key value
          */
-        void remove(int x) {
-            data.erase(data.begin()+x);
+        void remove(int k) {
+            data.erase(data.begin()+k);
         }
 
         /**
          * Returns the value at given key
-         * @param x the key
+         * @param k the key
          * @return the value
          */
-        string toString(int x) {
-            return "" + data[x];
+        string toString(int k) {
+            return "" + data[k];
         }
 
         /**
@@ -74,9 +74,8 @@ class DirectAddress {
 };
 
 class HashTable {
-    private:
         int mod, collision;
-        vector<Node> data;
+        vector<Node*> data;
 
     public:
         HashTable(int mod, int collision) {
@@ -84,70 +83,40 @@ class HashTable {
             this->collision = collision;
         }
 
-        HashTable(vector<int> keys, vector<char> values, int mod, int collision) {
-            this->data = {'*'};
-            for(int i=0; i < values.size(); i++)
-                this->add(keys[i], values[i]);
+        HashTable(vector<char> values, vector<int> keys, int mod, int collision) {
+            for(int i : values)
+                this->add(values[i], keys[i]);
             this->mod = mod;
             this->collision = collision;
         }
 
         /**
          * Apply hash function to key value
-         * @param x key value
+         * @param k key value
          * @return the index of the key value
          */
-        int hash(int x) {
-            return x % mod;
-        }
-
-        /**
-         * Handles collisions in table
-         * @param AR Add/Remove indicator: indicates whether the collision is being added (1) or removed/accessed (-1)
-         */
-        void collide(int AR) {
-            switch(AR) {
-                case 1:
-                {
-                    // Adding collision
-                    if(collision == 1) {
-                        // separate chaining
-                    } else if(collision == 2) {
-                        // quadratic probing
-                    }
-                } break;
-
-                case -1:
-                {
-                    // Removing collision
-                    if(collision == 1) {
-                        // separate chaining
-                    } else if(collision == 2) {
-                        // quadratic probing
-                    }
-                } break;
-
-                default: break;
-            }
+        int hash(int k) {
+            return k % mod;
         }
 
         /**
          * Add value after running hash function
-         * @param key the key
          * @param value the value associated with key
+         * @param key the key
          */
-        void add(int key, char value) {
-            Node* n = new Node(value, key, NULL);
-            if(data[hash(key)])
-            data.insert(data.begin()+hash(key), n);
-            
-            // try {
-            //     data.insert(data.begin()+hash(key), value);
-            // } catch(const out_of_range& e) {
-            //     while(data.size() <= hash(key)) {
-            //         data.push_back(NULL);
-            //     } data.insert(data.begin()+hash(key), value);
-            // }
+        void add(char value, int key) {
+            if(data[hash(key)]->value != '*' && this->collision == 1) {                 // Separate chaining
+                Node* n = data[hash(key)];
+                while(data[hash(key)]->value != '*')
+                    n = n->next;
+                Node* node = new Node(value, key, NULL);
+                n->next = node;
+            } else if (data[hash(key)]->value != '*' && this->collision == 2) {         // Quadratic probing
+                // bruh
+            } else {
+                if(hash(key) >= data.size()) data.resize(hash(key)+1, new Node('*', 0, NULL));
+                data.insert(data.begin()+hash(key), new Node(value, key, NULL));
+            }
         }
 
         /**
@@ -159,12 +128,21 @@ class HashTable {
         }
 
         /**
+         * Returns Node* object associated with given key value
+         * @param k key value
+         * @return the satellite data
+         */
+        Node* getData(int k) {
+            return data[hash(k)];
+        }
+
+        /**
          * Returns data at given key
-         * @param x key value
+         * @param k key value
          * @return the satellite value
          */
-        string toString(int x) {
-            return "" + data[hash(x)];
+        string toString(int k) {
+            return "" + getData(k)->value;
         }
 
         /**
@@ -173,10 +151,12 @@ class HashTable {
          * @return the string of satellite values
          */
         string toString(vector<int> searchKeys) {
-            string ret = toString(searchKeys[0]);
+            string ret;
 
-            for(int i=1; i < searchKeys.size(); i++)
-                ret += " " + toString(searchKeys[i]);
+            for(int i : searchKeys)
+                ret += toString(searchKeys[i]) + " ";
+            ret.pop_back();
+
             return ret;
         }
 };
@@ -219,7 +199,7 @@ int main() {
 
         case 1 || 2:
         {
-            HashTable* table = new HashTable(tableKeys, satData, mod, impTable);
+            HashTable* table = new HashTable(satData, tableKeys, mod, impTable);
             cout << table->toString(searchKeys);
         } break;
 
