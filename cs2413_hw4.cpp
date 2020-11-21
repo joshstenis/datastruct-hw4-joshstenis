@@ -144,11 +144,15 @@ class HashTable {
          * @return the satellite value
          */
         char toChar(int k) {
-            Node* n = data[hash(k)];
-            while(k != n->key) {
-                if(n->next == NULL) return '*';
-                n = n->next;
-            } return n->value;
+            if(collision == 1) {
+                Node* n = data[hash(k)];
+                while(k != n->key) {
+                    if(n->next == NULL) return '*';
+                    n = n->next;
+                } return n->value;
+            } else if(collision == 2) {
+                
+            }
         }
 
         /**
