@@ -75,10 +75,11 @@ class HashTable {
                 data.push_back(n);
             }
 
-            for(int i=0; i < values.size(); i++)            // Populate input key-value pairs
-                this->add(values[i], keys[i]);
             this->mod = mod;
             this->collision = collision;
+
+            for(int i=0; i < values.size(); i++)            // Populate input key-value pairs
+                this->add(values[i], keys[i]);
         }
 
         /**
@@ -116,7 +117,7 @@ class HashTable {
                 Node* n = new Node('*', -1, NULL);
                 Node* node = new Node(value, key, NULL);
                 if(hash(key) >= data.size()) data.resize(hash(key)+1, n);
-                data.insert(data.begin()+hash(key), node);
+                data[hash(key)] = node;
             }
         }
 
@@ -134,7 +135,11 @@ class HashTable {
          * @return the satellite value
          */
         char toChar(int k) {
-            return data[hash(k)]->value;
+            Node* n = data[hash(k)];
+
+            while(k != data[hash(k)]->key && n->next != NULL)
+                n = n->next;
+            return n->value;
         }
 
         /**
@@ -188,8 +193,8 @@ int main() {
         case 1 || 2:
         {
             HashTable* table = new HashTable(satData, tableKeys, mod, impTable);
-            table->printData();
-            // table->search(searchKeys);
+            // table->printData();
+            table->search(searchKeys);
         } break;
 
         default: break;
