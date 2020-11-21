@@ -81,7 +81,6 @@ class HashTable {
 
             for(int i=0; i < values.size(); i++)              // Populate input key-value pairs
                 this->add(values[i], keys[i]);
-            this->printData();
         }
 
         /**
@@ -122,15 +121,7 @@ class HashTable {
                 Node* node = new Node(value, key, NULL);
                 n->next = node;
             } else if (data[hash(key)]->value != '*' && this->collision == 2) {         // Quadratic probing
-                bool done = false;
-                int i = 1;
-                while(!done) {
-                    if((key + i*i) % mod >= data.size()) data.resize(2 * ((key + i*i) % mod), new Node('*', -1, NULL));
-                    if(data[(key + i*i) % mod]->value == '*') {
-                        data[(key + i*i) % mod] = new Node(value, key, NULL);
-                        done = true;
-                    }
-                }
+                
             } else {                                                                    // No collision
                 Node* n = new Node('*', -1, NULL);
                 Node* node = new Node(value, key, NULL);
