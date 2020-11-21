@@ -2,17 +2,6 @@
 #include <vector>
 using namespace std;
 
-/**
- * Nodes that will store key/value pairs while separate chaining
- */
-struct Node {
-    char value;
-    int key;
-    Node* next;
-
-    Node(char v, int k, Node* n) : value(v), key(k), next(n) {}
-};
-
 class DirectAddress {
 
         vector<char> data;
@@ -62,6 +51,17 @@ class DirectAddress {
             for(int i=1; i < searchKeys.size(); i++)
                 cout << " " << toChar(searchKeys[i]);
         }
+};
+
+/**
+ * Nodes that will store key/value pairs while separate chaining
+ */
+struct Node {
+    char value;
+    int key;
+    Node* next;
+
+    Node(char v, int k, Node* n) : value(v), key(k), next(n) {}
 };
 
 class HashTable {
@@ -126,23 +126,19 @@ class HashTable {
          * @param k key value
          * @return the satellite value
          */
-        string toString(int k) {
-            return "" + data[hash(k)]->value;
+        char toChar(int k) {
+            return data[hash(k)]->value;
         }
 
         /**
-         * Returns several values
+         * Outputs several search values
          * @param searchKeys the keys to the desired values
          * @return the string of satellite values
          */
-        string toString(vector<int> searchKeys) {
-            string ret;
-
-            for(int i : searchKeys)
-                ret += toString(searchKeys[i]) + " ";
-            ret.pop_back();
-
-            return ret;
+        string search(vector<int> searchKeys) {
+            cout << toChar(searchKeys[0]);
+            for(int i=1; i < searchKeys.size(); i++)
+                cout << " " << toChar(searchKeys[i]);
         }
 };
 
@@ -185,7 +181,7 @@ int main() {
         case 1 || 2:
         {
             HashTable* table = new HashTable(satData, tableKeys, mod, impTable);
-            cout << table->toString(searchKeys);
+            table->search(searchKeys);
         } break;
 
         default: break;
