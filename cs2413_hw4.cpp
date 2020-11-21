@@ -1,8 +1,6 @@
 #include <iostream>
 #include <vector>
-
 using namespace std;
-template <typename T>
 
 class DirectAddress {
     private:
@@ -86,7 +84,7 @@ class HashTable {
         };
 
         int mod, collision;
-        vector<T> data;
+        vector<Node> data;
 
     public:
         HashTable(int mod, int collision) {
