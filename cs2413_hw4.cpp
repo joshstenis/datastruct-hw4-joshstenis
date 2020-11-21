@@ -23,9 +23,6 @@ class DirectAddress {
         }
 
         DirectAddress(vector<int> keys, vector<char> values) {
-            for(int i=0; i< values.size(); i++)         // Populate data field with '*'
-                data.push_back('*');
-
             for(int i=0; i < values.size(); i++)
                 this->add(keys[i], values[i]);
             cout << "POPULATED" << endl;
@@ -33,10 +30,10 @@ class DirectAddress {
 
         /**
          * Add value to table
-         * @param key the key
          * @param value the value
+         * @param key the key
          */
-        void add(int key, char value) {
+        void add(char value, int key) {
             if(key >= data.size())
                 data.resize(key+1, '*');
             data.insert(data.begin()+key, value);
