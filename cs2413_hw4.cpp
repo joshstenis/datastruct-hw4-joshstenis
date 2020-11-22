@@ -80,7 +80,7 @@ class HashTable {
             this->collision = collision;
 
             for(int i=0; i < values.size(); i++)              // Populate input key-value pairs
-                this->add(values[i], keys[i]);
+                this->add(values[i], keys[i], values, keys);
         }
 
         /**
@@ -106,7 +106,7 @@ class HashTable {
          * @param value the value associated with key
          * @param key the key
          */
-        void add(char value, int key) {
+        void add(char value, int key, vector<char> values, vector<int> keys) {
             if(data[hash(key)]->value != '*' && this->collision == 1) {                 // Separate chaining
                 Node* n = data[hash(key)];
                 while(n->next != NULL)
@@ -116,14 +116,19 @@ class HashTable {
             } else if (data[hash(key)]->value != '*' && this->collision == 2) {         // Quadratic probing
                 Node* n = new Node(value, key, NULL);
 
-                int i = 0;
-                while(i < 10000) {
+                long int i = 0;
+                while(i < mod) {
                     if(hash(key + ++i*i) >= data.size()) {
-                        mod *= 2;
-                        data.resize(mod+1, new Node('*', -1, NULL));
+                        this->mod *= 2;
+                        data.resize(mod, new Node('*', -1, NULL));
+                        clear();
+
+                        for(int i=0; i < values.size(); i++)              // Recursive for rehashing
+                            this->add(values[i], keys[i], values, keys);
                     }
 
                     if(data[hash(key + i*i)]->value == '*') {
+                        cout << "VALUE " << value << " INDEX " << hash(key + i*i) << endl;
                         data[hash(key + i*i)] = n;
                         break;
                     }
@@ -156,11 +161,14 @@ class HashTable {
                     n = n->next;
                 } return n->value;
             } else if(collision == 2) {
-                int i = 0;
-                while(n->key != k) {
-                    if(data[hash(k + ++i*i)]->value == '*' || hash(k + ++i*i) >= data.size()) return '*';
-                    n = data[hash(k + i*i)];
-                } return n->value;
+                if(n->key == hash(k)) return n->value;
+                else {    
+                    for(int i=0; i < mod; i++) {
+                        if(n->key == k) break;
+                        if(data[hash(k + i*i)]->value == '*' || hash(k + i*i) >= data.size()) return '*';
+                        n = data[hash(k + i*i)];
+                    }
+                }
             } return n->value;
         }
 
@@ -222,6 +230,7 @@ int main() {
         {
             HashTable* table = new HashTable(satData, tableKeys, mod, 2);
             table->search(searchKeys);
+            table->printData();
         } break;
 
         default: break;
