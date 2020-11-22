@@ -124,6 +124,7 @@ class HashTable {
                         data.resize(mod+1, new Node('*', -1, NULL));
                     }
 
+                    cout << data[hash(key + i*i)]->value << endl;
                     if(data[hash(key + i*i)]->value == '*') {
                         data[hash(key + i*i)] = n;
                         break;
