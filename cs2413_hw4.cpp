@@ -117,11 +117,11 @@ class HashTable {
                 Node* n = new Node(value, key, NULL);
 
                 long int i = 0;
+                int size = mod;
                 while(i < mod) {
                     if(hash(key + ++i*i) >= data.size()) {                              // Checking to oversize
-                        this->mod *= 2;
-                        data.resize(mod, new Node('*', -1, NULL));
-                        clear();
+                        size *= 2;
+                        data.resize(size, new Node('*', -1, NULL));
 
                         // for(int i=0; i < values.size(); i++)                            // Recursive for rehashing
                         //     this->add(values[i], keys[i], values, keys);
