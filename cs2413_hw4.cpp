@@ -118,17 +118,16 @@ class HashTable {
 
                 long int i = 0;
                 while(i < mod) {
-                    if(hash(key + ++i*i) >= data.size()) {
+                    if(hash(key + ++i*i) >= data.size()) {                              // Checking to oversize
                         this->mod *= 2;
                         data.resize(mod, new Node('*', -1, NULL));
                         clear();
 
-                        for(int i=0; i < values.size(); i++)              // Recursive for rehashing
+                        for(int i=0; i < values.size(); i++)                            // Recursive for rehashing
                             this->add(values[i], keys[i], values, keys);
                     }
 
                     if(data[hash(key + i*i)]->value == '*') {
-                        cout << "VALUE " << value << " INDEX " << hash(key + i*i) << endl;
                         data[hash(key + i*i)] = n;
                         break;
                     }
@@ -230,7 +229,7 @@ int main() {
         {
             HashTable* table = new HashTable(satData, tableKeys, mod, 2);
             table->search(searchKeys);
-            table->printData();
+            // table->printData();
         } break;
 
         default: break;
