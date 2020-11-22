@@ -123,8 +123,8 @@ class HashTable {
                         data.resize(mod, new Node('*', -1, NULL));
                         clear();
 
-                        for(int i=0; i < values.size(); i++)                            // Recursive for rehashing
-                            this->add(values[i], keys[i], values, keys);
+                        // for(int i=0; i < values.size(); i++)                            // Recursive for rehashing
+                        //     this->add(values[i], keys[i], values, keys);
                     }
 
                     if(data[hash(key + i*i)]->value == '*') {
