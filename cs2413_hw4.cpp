@@ -117,7 +117,7 @@ class HashTable {
                 Node* n = new Node(value, key, NULL);
 
                 int i = 0;
-                while(i < mod) {
+                while(i < 1000) {
                     if(hash(key + ++i*i) >= data.size()) {
                         mod *= 2;
                         data.resize(mod+1, new Node('*', -1, NULL));
