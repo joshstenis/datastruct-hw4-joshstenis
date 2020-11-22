@@ -115,7 +115,6 @@ class HashTable {
                 n->next = node;
             } else if (data[hash(key)]->value != '*' && this->collision == 2) {         // Quadratic probing
                 Node* n = new Node(value, key, NULL);
-                Node* empty = new Node('*', -1, NULL);
 
                 int i = 0;
                 bool done = false;
@@ -123,7 +122,7 @@ class HashTable {
                     i++;
                     if(hash(key + i*i) >= data.size()) {
                         mod *= 2;
-                        data.resize(mod, empty);
+                        data.resize(mod, new Node('*', -1, NULL));
                     }
 
                     if(data[hash(key + i*i)]->value == '*') {
