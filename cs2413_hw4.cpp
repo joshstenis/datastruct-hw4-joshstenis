@@ -66,7 +66,7 @@ struct Node {
 };
 
 class HashTable {
-        int mod, collision;
+        int mod, collision, size;
         vector<Node*> data;
 
     public:
@@ -77,6 +77,7 @@ class HashTable {
             }
 
             this->mod = mod;
+            this->size = mod;
             this->collision = collision;
 
             for(int i=0; i < values.size(); i++)              // Populate input key-value pairs
@@ -119,10 +120,10 @@ class HashTable {
                 int i = 0;
                 while(true) {
                     i++;
-                    if(hash(key + i*i) >= data.size()) {
-                        // mod *= 2;
-                        data.resize(2*mod+1, new Node('*', -1, NULL));
-                    }
+                    // if(hash(key + i*i) >= data.size()) {
+                    //     size *= 2;
+                    //     data.resize(size+1, new Node('*', -1, NULL));
+                    // }
 
                     if(data[hash(key + i*i)]->value == '*') {
                         data[hash(key + i*i)] = n;
