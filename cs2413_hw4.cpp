@@ -117,8 +117,7 @@ class HashTable {
                 Node* n = new Node(value, key, NULL);
 
                 int i = 0;
-                bool done = false;
-                while(!done) {
+                while(true) {
                     i++;
                     if(hash(key + i*i) >= data.size()) {
                         mod *= 2;
@@ -127,7 +126,7 @@ class HashTable {
 
                     if(data[hash(key + i*i)]->value == '*') {
                         data[hash(key + i*i)] = n;
-                        done = true;
+                        break;
                     }
                 }
             } else {                                                                    // No collision
@@ -157,7 +156,7 @@ class HashTable {
                     if(hash(k + i*i) >= data.size()) return '*';
                     n = data[hash(k + i*i)];
                 } return n->value;
-            }
+            } return n->value;
         }
 
         /**
