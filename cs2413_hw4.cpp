@@ -88,13 +88,6 @@ class HashTable {
          */
         void printData() {
             for(Node* i : data) {
-                // if(i->next != NULL) {
-                //     Node* n = i;
-                //     while(n->next != NULL) {
-                //         n = n->next;
-                //         cout << n->value << " ";
-                //     }
-                // }
                 cout << i->value << " ";
             }
         }
@@ -121,7 +114,23 @@ class HashTable {
                 Node* node = new Node(value, key, NULL);
                 n->next = node;
             } else if (data[hash(key)]->value != '*' && this->collision == 2) {         // Quadratic probing
-                
+                Node* n = new Node(value, key, NULL);
+                Node* empty = new Node('*', -1, NULL);
+
+                int i = 0;
+                bool done = false;
+                while(!done) {
+                    i++;
+                    if(hash(key + i*i) >= data.size()) {
+                        mod *= 2;
+                        data.resize(mod, empty);
+                    }
+
+                    if(data[hash(key + i*i)]->value == '*') {
+                        data[hash(key + i*i)] = n;
+                        done = true;
+                    }
+                }
             } else {                                                                    // No collision
                 Node* n = new Node('*', -1, NULL);
                 Node* node = new Node(value, key, NULL);
@@ -137,19 +146,19 @@ class HashTable {
          */
         char toChar(int k) {
             Node* n = data[hash(k)];
-            if(collision == 1) {
+            if(this->collision == 1) {
                 while(n->key != k) {
                     if(n->next == NULL) return '*';
                     n = n->next;
                 } return n->value;
             } else if(collision == 2) {
-                int i = 1;
+                int i = 0;
                 while(n->key != k) {
                     i++;
-                    if(hash(k) + i*i >= data.size()) return '*';
-                    n = data[hash(k)];
+                    if(hash(k + i*i) >= data.size()) return '*';
+                    n = data[hash(k + i*i)];
                 } return n->value;
-            } return '*';
+            }
         }
 
         /**
@@ -200,11 +209,16 @@ int main() {
             table->search(searchKeys);
         } break;
 
-        case 1 || 2:
+        case 1:
         {
-            HashTable* table = new HashTable(satData, tableKeys, mod, impTable);
-            table->printData();
-            // table->search(searchKeys);
+            HashTable* table = new HashTable(satData, tableKeys, mod, 1);
+            table->search(searchKeys);
+        } break;
+
+        case 2:
+        {
+            HashTable* table = new HashTable(satData, tableKeys, mod, 2);
+            table->search(searchKeys);
         } break;
 
         default: break;
